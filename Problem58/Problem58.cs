@@ -12,15 +12,15 @@ namespace Problem58
         {
             var cur = 1U;
             var inc = 2U;
-            var cycle = 1;
+            var cycle = 0;
             while (true)
             {
                 yield return cur;
                 cur += inc;
-                if (cycle == 4)
+                if (cycle == 3)
                 {
                     inc += 2;
-                    cycle = 1;
+                    cycle = 0;
                 }
                 else
                 {
@@ -31,7 +31,14 @@ namespace Problem58
 
         static void Main(string[] args)
         {
-            PrimeSieve ps = new PrimeSieve(100000000);
+            foreach (var k in DiagonalVals().Take(20))
+            {
+                Console.Write(k + ",");
+            }
+            Console.WriteLine();
+            
+
+            PrimeSieve ps = new PrimeSieve(10000000);
             var diagonalsTaken = 0;
             var primes = 0;
             var lastRatio = 1.0;
@@ -43,13 +50,15 @@ namespace Problem58
                     primes++;
                 }
 
-                var ratio = ((float)primes / (float)diagonalsTaken);
+                if (diagonalsTaken == 1)
+                    continue;
 
-                if (diagonalsTaken % 4 == 0)
+                if ((diagonalsTaken-1) % 4 == 0)
                 {
+                    var ratio = ((float)primes / (float)diagonalsTaken);
                     if (ratio < lastRatio)
                     {
-                        Console.WriteLine("New ratio {0} at {1}. [Primes: {2}]", ratio, (float)diagonalsTaken / 4.0, ps.Size());
+                        Console.WriteLine("New ratio {0}. [{1}/{2}]", ratio, primes, diagonalsTaken);
                         lastRatio = ratio;
                     }
                     if (ratio < 0.1)
@@ -61,6 +70,7 @@ namespace Problem58
             Console.WriteLine("Diagonals Taken: {0}, Primes: {1}", diagonalsTaken, primes);
             var loops = diagonalsTaken / 4;
             Console.WriteLine("Loops: {0}, Length Of Side {1}", loops, 1 + 2*loops);
+              
         }
     }
 }
