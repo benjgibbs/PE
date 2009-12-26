@@ -38,15 +38,13 @@ object Utils {
     primes.toList
   }
 
-
   def primeFactors(of: Int, primes: List[Int]) : List[Int] = {
     if(primes.size == 0) Nil
     else if(of % primes.head == 0) primes.head :: primeFactors(of, primes.tail)
     else primeFactors(of, primes.tail)
   }
 
-   def pow(x:Int,y:Int) : Int = Math.pow(x,y).toInt
-  
+  def pow(x:Int,y:Int) : Int = Math.pow(x,y).toInt
   
   def bpf(o:Int, p:Int, f:Int) : Int =  {               
     if (o==pow(p,f)) f            
@@ -58,10 +56,52 @@ object Utils {
     if(primes == Nil) Nil 
     else {
       val x = primes.head
-      if (x==of) PrimeFactor(x,1) :: Nil
-      else if ((of%x)  == 0) PrimeFactor(x, bpf(of,x,1)) :: primeFactorization(of/pow(x,bpf(of,x,1)), primes.tail)
-      else primeFactorization(of, primes.tail) 
+      if (x==of) 
+        PrimeFactor(x,1) :: Nil
+      else if ((of%x)  == 0) 
+        PrimeFactor(x, bpf(of,x,1)) :: primeFactorization(of/pow(x,bpf(of,x,1)), primes.tail)
+      else 
+        primeFactorization(of, primes.tail) 
     }
+  }
+    
+  def swap[T](x:Array[T], i:Int, j:Int) : Array[T] = {
+    val t = x(i)
+    x(i) = x(j)
+    x(j) = t
+    x
+  }
+
+  def fac(x: Int) : Int =  {
+    if(x == 0) 1
+    else x * fac(x-1)
+  }
+
+  def arrayToInt(x: Array[Int], k: Int) : Int = {
+    if(x.size ==0) 0
+    else x(x.size-1) * pow(10,k) + arrayToInt(x.take(x.size-1), k+1)
+  }
+
+  def allPermsOfDigits(x:Int)={
+    for(k <- allPerms(x.toString.toArray.map(_.toString.toInt)))
+      yield arrayToInt(k,0)
+  }
+
+  def allPerms[T](x: Array[T]) = {
+    for (a <- 0 to fac(x.length)-1) 
+      yield permutation(a,x)
+  }
+  
+  def permutation[T](k: Int, y:Array[T]) : Array[T] = {
+    var result = new Array[T](y.size)
+    Array.copy(y,0,result,0,y.size)
+    
+    var seed = k
+    for(loop <- 2 to result.length){
+      swap(result, (seed % loop), loop-1)
+      seed = seed / loop 
+    }
+    result
   }
 
   def main(args: Array[String]) = {
@@ -84,6 +124,16 @@ object Utils {
     assert(List(PrimeFactor(2,3)) == primeFactorization(8,primes))
     assert(List(PrimeFactor(2,1),PrimeFactor(3,1)) == primeFactorization(6,primes))
     assert(List(PrimeFactor(2,3), PrimeFactor(3,1)) == primeFactorization(24,primes))
+    
+    assert(Array(1,2,4,3).deepEquals(swap(Array(1,2,3,4),2,3)))
+    
+    assert(allPermsOfDigits(123).size == 6)
+    
+   for (i <- 1 to 15){
+     println(i)
+     println(permutation(i, Array(1,4,8,7)))
+   }
+
 
     println("Tests finished.")
   }
