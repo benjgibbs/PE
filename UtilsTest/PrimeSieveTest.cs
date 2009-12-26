@@ -29,12 +29,19 @@ namespace UtilsTest
                                             877,881,883,887,907,911,919,929,937,941,
                                             947,953,967,971,977,983,991,997 };
 
+        private long limit = 1000L;
+        
         [TestMethod]
-        public void TestSieve()
+        public void TestSieve1()
         {
-            PrimeSieve ps = new PrimeSieve(1000);
-
-            for(var i = 0U; i < 1000U; i++ )
+            TestSieve(new PrimeSieve(limit));
+            TestSieve(new PrimeSieve2(limit));
+            TestSieve(new PrimeSieve3(limit));
+        }
+        
+        public void TestSieve(IPrimeSieve ps)
+        {
+            for(var i = 0U; i < limit; i++ )
             {
                 if(primes.Contains((int)i))
                 {
@@ -50,8 +57,20 @@ namespace UtilsTest
         [TestMethod]
         public void TestSieveGrows()
         {
-            PrimeSieve ps = new PrimeSieve(17);
+            TestSieveGrow(new PrimeSieve(13));
 
+            TestSieveGrow(new PrimeSieve2(20));
+            TestSieveGrow(new PrimeSieve2(13));
+            TestSieveGrow(new PrimeSieve2(500));
+
+            TestSieveGrow(new PrimeSieve3(20));
+            TestSieveGrow(new PrimeSieve3(13));
+            TestSieveGrow(new PrimeSieve3(500));
+            TestSieveGrow(new PrimeSieve3(17));
+        }
+
+        private void TestSieveGrow(IPrimeSieve ps)
+        {
             for (var i = 0U; i < 1000U; i++)
             {
                 if (primes.Contains((int)i))
