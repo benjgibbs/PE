@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FractionTest.cs" />
+    <Compile Include="GrowableArrayTest.cs" />
     <Compile Include="PrimeSieveTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
