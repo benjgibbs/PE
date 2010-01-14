@@ -35,7 +35,7 @@ namespace Problem58
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            PrimeSieve3 ps = new PrimeSieve3(1024*1024);
+            IPrimeSieve ps = new PrimeSieve(1024*1024*64);
             var diagonalsTaken = 0;
             var primes = 0;
             var lastRatio = 1.0;
@@ -69,7 +69,8 @@ namespace Problem58
 
             Console.WriteLine("Diagonals Taken: {0}, Primes: {1}, Took: {2}", diagonalsTaken, primes, sw.ElapsedMilliseconds);
             var loops = diagonalsTaken / 4;
-            Console.WriteLine("Loops: {0}, Length Of Side {1}", loops, 1 + 2*loops);
+            Console.WriteLine("Loops: {0}, Length Of Side {1}", loops, 1 + 2 * loops);
+            Console.WriteLine("Prime size: {0}", ps.Size());
         }
     }
 }

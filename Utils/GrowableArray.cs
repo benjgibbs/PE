@@ -13,7 +13,6 @@ namespace Utils
         public GrowableArray(long initialSz)
         {
             this.chunkSz = initialSz;
-            AddChunk();
         }
 
         public void AddChunk()
@@ -23,7 +22,7 @@ namespace Utils
 
         public void Set(long idx, T val)
         {
-            while (LongLength < idx)
+            while (LongLength < (idx+1))
             {
                 AddChunk();
             }

@@ -11,7 +11,6 @@ namespace Utils
          * To Try:
          * 1. Don't keep copying arrays of primes, just keep adding them.
          * 2. Don't store the array, just store the primes themselves.
-         * 
          */
         private bool[] notPrimes;
 
