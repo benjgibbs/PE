@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Utils;
+using System.Diagnostics;
 
 namespace Problem58
 {
     public class Problem58
     {
-        static IEnumerable<ulong> DiagonalVals()
+        static IEnumerable<long> DiagonalVals()
         {
             var cur = 1U;
             var inc = 2U;
@@ -31,14 +32,10 @@ namespace Problem58
 
         static void Main(string[] args)
         {
-            foreach (var k in DiagonalVals().Take(20))
-            {
-                Console.Write(k + ",");
-            }
-            Console.WriteLine();
-            
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
-            PrimeSieve ps = new PrimeSieve(10000000);
+            IPrimeSieve ps = new PrimeSieve(1024*1024*64);
             var diagonalsTaken = 0;
             var primes = 0;
             var lastRatio = 1.0;
@@ -51,14 +48,15 @@ namespace Problem58
                 }
 
                 if (diagonalsTaken == 1)
+                {
                     continue;
+                }
 
                 if ((diagonalsTaken-1) % 4 == 0)
                 {
                     var ratio = ((float)primes / (float)diagonalsTaken);
                     if (ratio < lastRatio)
                     {
-                        Console.WriteLine("New ratio {0}. [{1}/{2}]", ratio, primes, diagonalsTaken);
                         lastRatio = ratio;
                     }
                     if (ratio < 0.1)
@@ -67,10 +65,12 @@ namespace Problem58
                     }
                 }
             }
-            Console.WriteLine("Diagonals Taken: {0}, Primes: {1}", diagonalsTaken, primes);
+            sw.Stop();
+
+            Console.WriteLine("Diagonals Taken: {0}, Primes: {1}, Took: {2}", diagonalsTaken, primes, sw.ElapsedMilliseconds);
             var loops = diagonalsTaken / 4;
-            Console.WriteLine("Loops: {0}, Length Of Side {1}", loops, 1 + 2*loops);
-              
+            Console.WriteLine("Loops: {0}, Length Of Side {1}", loops, 1 + 2 * loops);
+            Console.WriteLine("Prime size: {0}", ps.Size());
         }
     }
 }

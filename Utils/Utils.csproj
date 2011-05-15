@@ -41,9 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrowableArray.cs" />
+    <Compile Include="IPrimeSieve.cs" />
+    <Compile Include="PrimeSieve2.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="PrimeList.cs" />
     <Compile Include="PrimeSieve.cs" />
+    <Compile Include="PrimeSieve3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

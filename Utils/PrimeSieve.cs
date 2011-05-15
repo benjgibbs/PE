@@ -5,37 +5,34 @@ using System.Text;
 
 namespace Utils
 {
-    public class PrimeSieve
+    public class PrimeSieve : Utils.IPrimeSieve
     {
         /*
          * To Try:
          * 1. Don't keep copying arrays of primes, just keep adding them.
          * 2. Don't store the array, just store the primes themselves.
-         * 
          */
-        private bool[] primes;
+        private bool[] notPrimes;
 
         public PrimeSieve(long upTo)
         {
-            primes = new bool[upTo];
-            PopulateSieveFrom(primes);
+            bool[] p = new bool[upTo];
+            p[0] = p[1] = true;
+            PopulateSieveFrom(p);
+            notPrimes = p;
         }
 
         private static void PopulateSieveFrom(bool[] sieve, long from = 2)
         {
-            for (var i = from; i < sieve.LongLength; ++i)
+            long upTo = (long)Math.Sqrt(sieve.LongLength) + 1;
+            for (long i = 2; i < upTo; i++)
             {
-                sieve[i] = true;
-            }
-
-            for (long i = 2; i < Math.Sqrt(sieve.LongLength); i++)
-            {
-                if (sieve[i])
+                if (!sieve[i])
                 {
                     var k = (i < from) ? FirstK(i,from): 2*i;
                     while (k < sieve.LongLength)
                     {
-                        sieve[k] = false;
+                        sieve[k] = true;
                         k += i;
                     }
                 }
@@ -45,29 +42,31 @@ namespace Utils
         private static long FirstK(long i, long from)
         {
             var mod = from % i;
-            return from  - mod;
+            return from - mod;
         }
 
         public void GrowSieve()
         {
-            long newLength = checked(primes.LongLength*2);
+            long newLength = checked(notPrimes.LongLength*2);
             var newPrimes = new bool[newLength];
-            Array.Copy(primes, newPrimes, primes.LongLength);
-            PopulateSieveFrom(newPrimes, primes.LongLength);
-            primes = newPrimes;
+            Array.Copy(notPrimes, newPrimes, notPrimes.LongLength);
+            PopulateSieveFrom(newPrimes, notPrimes.LongLength);
+            notPrimes = newPrimes;
         }
 
-        public bool IsPrime(ulong toCheck)
+        public bool IsPrime(long toCheck)
         {
-            if(toCheck < (ulong)primes.LongLength)
-                return primes[toCheck];
+            if (toCheck < Size())
+            {
+                return !notPrimes[toCheck];
+            }
             GrowSieve();
             return IsPrime(toCheck);
         }
 
         public long Size()
         {
-            return primes.LongLength;
+           return notPrimes.LongLength;
         }
     }
 }
