@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px }
+  #map_canvas { height: 100% }
+</style>
+<script type="text/javascript">
+  var maxPrime = 1000000;
+  var primes = new Array(maxPrime);
+
+  function createPrimes() {
+    primes[0] = false;
+    primes[1] = false;
+    for(var i = 2; i < maxPrime; i++) {
+      primes[i] = true  
+    }
+    for(var i = 2; i < maxPrime; i++) {
+      if(primes[i]) {
+        for(var j = 2*i; j < maxPrime;j+=i) {
+          primes[j] = false 
+        }
+      }
+    }
+  }
+
+  function numDigits(x) {
+    var d = 0;
+    var k = x;
+    while(k>0){
+      d++;
+      k = Math.floor(k/10);
+    }
+    return d;
+  }
+
+  function digitAt(x,p) {
+    return Math.floor(x/Math.pow(10,p))%10;
+  }
+
+  function replace(x,p,n) {
+    var fac = Math.pow(10,p);
+    var a = x-digitAt(x,p)*fac;
+    return a + n*fac;
+  }
+
+  function initialize() {
+    document.write("<p>Creating primes up to "+primes.length+"</p>");
+    var start = (new Date()).getTime();
+    createPrimes();
+    var end = (new Date()).getTime();
+    document.write("<p>done.  Took "+(end - start)+"ms</p>");
+
+    for(var i = 2; i < maxPrime; i++){
+      if(primes[i]){
+        for(var j = 0; j < 10; ++j){
+          var others = new Array();
+          for(var p = 1; p < numDigits(i); p++){
+            // Ned to replace p digits somehow...
+            for(var a = 0; a < numDigits(i); a++){
+              var d = digitAt(i,a);
+              if(d != j) {
+                var num = replace(i,p,j);
+                if(primes[num]) {
+                  others.push(num);
+                }
+              }
+            }
+
+          }
+          if(others.length > 6) {
+              document.write("<p>");
+              document.write(i + " is prime and so are ");
+              document.write(others.length + " others: ");
+              for(var k = 0; k < others.length; k++){
+                document.write(others[k] +", ");
+              }
+              document.write("</p>");
+          }
+        }
+      }
+    }
+  }
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+</body>
+</html>
