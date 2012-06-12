@@ -51,6 +51,11 @@ public class Problem71 {
 		Fraction f2 = new Fraction(2,4);
 		assertTrue(f1.equals(f2));
 		assertEquals(f1.compareTo(f2),0);
+		
+		Fraction f3 = new Fraction(1,4);
+		
+		assertTrue(f1.compareTo(f3) > 0);
+		assertTrue(f3.compareTo(f1) < 0);
 	}
 	
 	@Test public void checkGivens(){
@@ -80,24 +85,19 @@ public class Problem71 {
 	}
 
 	private static Fraction getClosestFractionTo(Fraction fHigh, int maxD){
-		Fraction fLow = new Fraction(fHigh.n, fHigh.d*2);
-		for(int d = 2; d < maxD; d++){
-			long start = System.currentTimeMillis();
-			for(int n = 1; n < d; ++n){
+		Fraction fLow = new Fraction(0, 1);
+		for(int d = 2; d <= maxD; d++){
+			int low = (int)(d*fLow.f);
+			boolean done = false;
+			for(int n = low; n < d && !done; ++n){
 				Fraction f = new Fraction(n,d);
 				if(f.compareTo(fLow) > 0){
 					if(f.compareTo(fHigh) < 0){
 						fLow = f;
-					} else {
-						continue;
+					}else{
+						done = true;
 					}
 				}
-			}
-			
-			if(d % 1000 == 0){
-				System.out.println(String.format(
-					"%d took %dms current best is %s", 
-					d, System.currentTimeMillis() - start, fLow));
 			}
 		}
 		return fLow;
