@@ -1,10 +1,10 @@
 package problem71;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Set;
 import java.util.TreeSet;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -49,7 +49,6 @@ public class Problem71 {
 	}
 	
 	@Test public void checkGivens(){
-		int d = 8;
 		Set<Fraction> fractions = createFractionsUpTo(8);
 		StringBuilder builder = new StringBuilder();
 		boolean first = true;

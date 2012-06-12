@@ -7,11 +7,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.Test;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+
 import static java.lang.System.out;
 
 public class Problem81 {
 	public static void main(String[] args){
-		int[][] matrix = getMatrix();
+		calculateShortestPath(getMatrix());
+	}
+	
+	@Test public void checkWeMatchGivens(){
+		long shortestSum = calculateShortestPath(getMatrixTest());
+		assertThat(shortestSum, is(equalTo(2427L)));
+	}
+
+	private static long calculateShortestPath(int[][] matrix) {
 		int rows = matrix.length;
 		int cols = matrix[0].length;
 		long[][] shortestPaths = new long[rows][];
@@ -42,6 +54,7 @@ public class Problem81 {
 			out.println(Arrays.toString(row));
 		}
 		out.println("Cheapest corner is: " + shortestPaths[rows-1][cols-1]);
+		return shortestPaths[rows-1][cols-1];
 	}
 	
 	private static int[][] getMatrixTest(){
