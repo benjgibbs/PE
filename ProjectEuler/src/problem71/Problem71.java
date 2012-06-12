@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class Problem71 {
 
@@ -15,25 +17,28 @@ public class Problem71 {
 		public final int d;
 		public final float f;
 		public Fraction(int n, int d){
-			
-			if(d % n > 0){
-				
-			}
-			this.n = n;
-			this.d = d;
+			int gcd = gcd(n,d);
+			this.n = n/gcd;
+			this.d = d/gcd;
 			this.f = (float)n/d;
 		}
+		
+		int gcd(int a, int b){
+			if(b==0){
+				return a;
+			}
+			return gcd(b, a % b);
+		}
+		
 		@Override public String toString() {
 			return String.format("%d/%d", n,d);
 		}
-		@Override
-		public int compareTo(Fraction o) {
+		@Override public int compareTo(Fraction o) {
 			if(o.f == f) return 0;
 			if(o.f < f) return 1;
 			return -1;
 		}
-		@Override
-		public boolean equals(Object obj) {
+		@Override public boolean equals(Object obj) {
 			if(!(obj instanceof Fraction))
 				return false;
 			Fraction rhs = (Fraction)obj;
@@ -65,17 +70,39 @@ public class Problem71 {
 	}
 	
 	public static void main(String[] args) {
-		Set<Fraction> fractions = createFractionsUpTo(1_000_000);
-		Fraction threeSevenths = new Fraction(3,7);
-		Fraction last = null;
-		for(Fraction f : fractions){
-			if(f.equals(threeSevenths)){
-				System.out.println("Found 3/7 to the left we have: " + last);
-			}
-			last = f;
-		}
+		Fraction f = getClosestFractionTo(new Fraction(3,7), 1_000_000);
+		System.out.println("To the left of 3/7 we have: " + f);
+	}
+	
+	@Test public void checkLowestFractionWithGiven(){
+		Fraction f = getClosestFractionTo(new Fraction(3,7), 8);
+		assertThat(f, is(equalTo(new Fraction(2,5))));
 	}
 
+	private static Fraction getClosestFractionTo(Fraction fHigh, int maxD){
+		Fraction fLow = new Fraction(fHigh.n, fHigh.d*2);
+		for(int d = 2; d < maxD; d++){
+			long start = System.currentTimeMillis();
+			for(int n = 1; n < d; ++n){
+				Fraction f = new Fraction(n,d);
+				if(f.compareTo(fLow) > 0){
+					if(f.compareTo(fHigh) < 0){
+						fLow = f;
+					} else {
+						continue;
+					}
+				}
+			}
+			
+			if(d % 1000 == 0){
+				System.out.println(String.format(
+					"%d took %dms current best is %s", 
+					d, System.currentTimeMillis() - start, fLow));
+			}
+		}
+		return fLow;
+	}
+	
 	private static Set<Fraction> createFractionsUpTo(int d) {
 		TreeSet<Fraction> fractions = new TreeSet<Fraction>();
 		
