@@ -15,12 +15,12 @@ public class Problem71 {
 	static class Fraction implements Comparable<Fraction>{
 		public final int n;
 		public final int d;
-		public final float f;
+		public final double f;
 		public Fraction(int n, int d){
 			int gcd = gcd(n,d);
 			this.n = n/gcd;
 			this.d = d/gcd;
-			this.f = (float)n/d;
+			this.f = (double)n/d;
 		}
 		
 		int gcd(int a, int b){
@@ -75,6 +75,10 @@ public class Problem71 {
 	}
 	
 	public static void main(String[] args) {
+		//It is not
+		//To the left of 3/7 we have: 383480/894787
+		//It could be:
+		//To the left of 3/7 we have: 428570/999997
 		Fraction f = getClosestFractionTo(new Fraction(3,7), 1_000_000);
 		System.out.println("To the left of 3/7 we have: " + f);
 	}
@@ -89,7 +93,7 @@ public class Problem71 {
 		for(int d = 2; d <= maxD; d++){
 			int low = (int)(d*fLow.f);
 			boolean done = false;
-			for(int n = low; n < d && !done; ++n){
+			for(int n = low; n < d && !done; n++){
 				Fraction f = new Fraction(n,d);
 				if(f.compareTo(fLow) > 0){
 					if(f.compareTo(fHigh) < 0){
@@ -121,5 +125,4 @@ public class Problem71 {
 		}
 		return fractions;
 	}
-
 }
