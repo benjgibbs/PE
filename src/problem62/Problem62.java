@@ -25,7 +25,7 @@ public class Problem62 {
 			long cube = val * val * val;
 			cubes.put(cube,val);
 			String cubeString = String.valueOf(cube);
-			List<String> ps = Permutations.findPermutations(cubeString, "0");
+			List<String> ps = Permutations.bHeapPermute(cubeString);
 			for(String p : ps){
 				Long posCube = Long.valueOf(p);
 				if(cubes.containsKey(posCube)){
