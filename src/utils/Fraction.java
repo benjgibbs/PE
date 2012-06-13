@@ -38,18 +38,6 @@ public class Fraction implements Comparable<Fraction>{
 		return rhs.n == n && rhs.d == d;
 	}
 
-	// Tests
 	
-	@Test public void checkEqualFractions(){
-		Fraction f1 = new Fraction(1,2);
-		Fraction f2 = new Fraction(2,4);
-		assertTrue(f1.equals(f2));
-		assertEquals(f1.compareTo(f2),0);
-		
-		Fraction f3 = new Fraction(1,4);
-		
-		assertTrue(f1.compareTo(f3) > 0);
-		assertTrue(f3.compareTo(f1) < 0);
-	}
 
 }

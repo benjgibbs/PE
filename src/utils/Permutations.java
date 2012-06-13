@@ -35,30 +35,6 @@ public class Permutations {
 		return perms;
 	}
 
-	@Test public void checkSimpleCase(){
-		String[] expect = new String[] {"ab", "ba" };
-		List<String> result = findPermutations("ab","");
-		Assert.assertArrayEquals(
-				expect,
-				result.toArray(new String[result.size()]));
-		
-	}
-	@Test public void checkLessSimpleCase(){
-		String[] expect = new String[] {"abc", "acb", "bac", "bca", "cab","cba" };
-		List<String> result = findPermutations("abc","");
-		Assert.assertArrayEquals(
-				expect,
-				result.toArray(new String[result.size()]));
-		
-	}
 	
-	@Test public void checkPrefixesAreIgnored(){
-		String[] expect = new String[] {"bac", "bca", "cab","cba" };
-		List<String> result = findPermutations("abc","a");
-		Assert.assertArrayEquals(
-				expect,
-				result.toArray(new String[result.size()]));
-		
-	}
 	
 }
