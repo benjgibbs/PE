@@ -31,7 +31,4 @@ public class Permutations {
 		findPermutations("",toPermute, perms, ignorePrefix);
 		return perms;
 	}
-
-	
-	
 }
