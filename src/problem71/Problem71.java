@@ -47,7 +47,7 @@ public class Problem71 {
 	private static Fraction getClosestFractionTo(Fraction fHigh, int maxD){
 		Fraction fLow = new Fraction(0, 1);
 		for(int d = 2; d <= maxD; d++){
-			int low = (int)(d*fLow.f);
+			int low =  (int)(fLow.f.doubleValue()*d);
 			boolean done = false;
 			for(int n = low; n < d && !done; n++){
 				Fraction f = new Fraction(n,d);
