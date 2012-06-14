@@ -1,11 +1,10 @@
 package problem62;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
-import utils.Permutations;
+import java.util.Map;
 
 public class Problem62 {
 
@@ -15,41 +14,35 @@ public class Problem62 {
 //
 //	Find the smallest cube for which exactly five permutations of its digits are cube.
 	
-	//Calculating cubes took: 5446ms
-	//Storing cubes took: 4168ms
 	public static void main(String[] args) {
-		
-		long val = 10;
-		long numToFind = 3;
-		boolean found = false;
+		System.out.println("Max Long value: " + Long.MAX_VALUE);
 		long start = System.currentTimeMillis();
-		Set<Long> cubes = new HashSet<Long>();
+		boolean found = false;
+		int numToFind = 5;
+		long i = 1;
+		Map<String,Integer> cubes = new HashMap<>();
+		Map<String,List<Long>> cubePerms = new HashMap<>();
 		while(!found){
-			long cube = val * val * val;
-			cubes.add(cube);
+			long cube = i * i * i;
 			String cubeString = String.valueOf(cube);
-			Set<String> ps = Permutations.quickPerm(cubeString);
-			List<Long> permutedCubes = new ArrayList<>();
-			for(String p : ps){
-				if(p.startsWith("0")){
-					continue;
-				}
-				Long posCube = Long.valueOf(p);
-				if(cubes.contains(posCube)){
-					permutedCubes.add(posCube);
-					if(permutedCubes.size() >= numToFind){
-						found = true;
-						printResult(permutedCubes);
-						System.out.println("Took: " +(System.currentTimeMillis() - start) + "ms");
-						break;
-					}
-				}
+			char[] bits = cubeString.toCharArray();
+			Arrays.sort(bits);
+			String sortedCubeString = String.valueOf(bits);
+			if(cubes.containsKey(sortedCubeString)){
+				cubes.put(sortedCubeString, cubes.get(sortedCubeString) + 1);
+			}else{
+				cubes.put(sortedCubeString, 1);
+				cubePerms.put(sortedCubeString, new ArrayList<Long>());
 			}
-			val++;
-			if(val % 100 == 0){
-				System.out.println("Checked up to " + val );
+			cubePerms.get(sortedCubeString).add(cube);
+			
+			if(cubes.get(sortedCubeString) >= numToFind){
+				found = true;
+				printResult(cubePerms.get(sortedCubeString));
 			}
+			i++;
 		}
+		System.out.println("Took: " +(System.currentTimeMillis() - start) + "ms");
 	}
 
 	private static void printResult(List<Long> permutedCubes) {
@@ -60,15 +53,11 @@ public class Problem62 {
 			}
 			builder.append(c)
 					.append("=")
-					.append((int)Math.cbrt(c))
+					.append((long)Math.cbrt(c))
 					.append("^3");
 		}
 		System.out.println(String.format("Found %d permutations %s",
 				permutedCubes.size(),
 				builder.toString()));
 	}
-	
-	
-	
-
 }
