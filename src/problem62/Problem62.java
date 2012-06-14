@@ -14,39 +14,35 @@ public class Problem62 {
 //	cube which has exactly three permutations of its digits which are also cube.
 //
 //	Find the smallest cube for which exactly five permutations of its digits are cube.
+	
+	//Calculating cubes took: 5446ms
+	//Storing cubes took: 4168ms
 	public static void main(String[] args) {
 		
 		long val = 10;
 		long numToFind = 3;
 		boolean found = false;
 		long start = System.currentTimeMillis();
-		Set<Long> considered = new HashSet<Long>();
+		Set<Long> cubes = new HashSet<Long>();
 		while(!found){
 			long cube = val * val * val;
-			if(!considered.contains(cube)){
-				String cubeString = String.valueOf(cube);
-				Set<String> ps = Permutations.quickPerm(cubeString);
-				List<Long> cubes = new ArrayList<>();
-				for(String p : ps){
-					if(p.startsWith("0")){
-						continue;
+			cubes.add(cube);
+			String cubeString = String.valueOf(cube);
+			Set<String> ps = Permutations.quickPerm(cubeString);
+			List<Long> permutedCubes = new ArrayList<>();
+			for(String p : ps){
+				if(p.startsWith("0")){
+					continue;
+				}
+				Long posCube = Long.valueOf(p);
+				if(cubes.contains(posCube)){
+					permutedCubes.add(posCube);
+					if(permutedCubes.size() >= numToFind){
+						found = true;
+						printResult(permutedCubes);
+						System.out.println("Took: " +(System.currentTimeMillis() - start) + "ms");
+						break;
 					}
-					Long posCube = Long.valueOf(p);
-					considered.add(posCube);
-					
-					double d = Math.cbrt(posCube);
-					double ceil = Math.ceil(d);
-					double floor = Math.floor(d);
-					if(ceil == floor){
-						cubes.add(posCube);
-						if(cubes.size() >= numToFind){
-							found = true;
-							printResult(cubes);
-							System.out.println("Took: " +(System.currentTimeMillis() - start) + "ms");
-							break;
-						}
-					}
-					
 				}
 			}
 			val++;
