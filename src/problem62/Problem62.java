@@ -1,8 +1,9 @@
 package problem62;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import utils.Permutations;
 
@@ -15,44 +16,55 @@ public class Problem62 {
 //	Find the smallest cube for which exactly five permutations of its digits are cube.
 	public static void main(String[] args) {
 		
-		long val = 100;
-		long numToFind = 4;
+		long val = 10;
+		long numToFind = 3;
 		boolean found = false;
-		Map<Long,Long> cubes = new HashMap<Long,Long>();
-		Map<Long,Long> permutedCubes = new HashMap<Long,Long>();
+		long start = System.currentTimeMillis();
+		Set<Long> considered = new HashSet<Long>();
 		while(!found){
-			permutedCubes.clear();
 			long cube = val * val * val;
-			cubes.put(cube,val);
-			String cubeString = String.valueOf(cube);
-			List<String> ps = Permutations.bHeapPermute(cubeString);
-			for(String p : ps){
-				Long posCube = Long.valueOf(p);
-				if(cubes.containsKey(posCube)){
-					permutedCubes.put(posCube, cubes.get(posCube));
+			if(!considered.contains(cube)){
+				String cubeString = String.valueOf(cube);
+				Set<String> ps = Permutations.quickPerm(cubeString);
+				List<Long> cubes = new ArrayList<>();
+				for(String p : ps){
+					if(p.startsWith("0")){
+						continue;
+					}
+					Long posCube = Long.valueOf(p);
+					considered.add(posCube);
+					
+					double d = Math.cbrt(posCube);
+					double ceil = Math.ceil(d);
+					double floor = Math.floor(d);
+					if(ceil == floor){
+						cubes.add(posCube);
+						if(cubes.size() >= numToFind){
+							found = true;
+							printResult(cubes);
+							System.out.println("Took: " +(System.currentTimeMillis() - start) + "ms");
+							break;
+						}
+					}
+					
 				}
 			}
-			if(permutedCubes.size() >= numToFind){
-				printResult(permutedCubes);
-				found = true;
-			}else{
-				val++;
-			}
+			val++;
 			if(val % 100 == 0){
-				System.out.println("Checked up to " + val + ", size of cubes dictionary is " + cubes.size());
+				System.out.println("Checked up to " + val );
 			}
 		}
 	}
 
-	private static void printResult(Map<Long, Long> permutedCubes) {
+	private static void printResult(List<Long> permutedCubes) {
 		StringBuilder builder = new StringBuilder();
-		for(Map.Entry<Long,Long> kvp : permutedCubes.entrySet()){
+		for(Long c : permutedCubes){
 			if(builder.length() > 0){
 				builder.append(", ");
 			}
-			builder.append(kvp.getKey())
+			builder.append(c)
 					.append("=")
-					.append(kvp.getValue())
+					.append((int)Math.cbrt(c))
 					.append("^3");
 		}
 		System.out.println(String.format("Found %d permutations %s",

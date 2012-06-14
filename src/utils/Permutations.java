@@ -1,15 +1,13 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.primitives.Chars;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Permutations {
 
 	//////////////////////////////////////////////////////////////////////////////
 	public static void findPermutations(
-			String prefix, String toPermute, List<String> perms, String ignorePrefix){
+			String prefix, String toPermute, Set<String> perms, String ignorePrefix){
 		if(ignorePrefix != null && prefix.startsWith(ignorePrefix)){
 			return;
 		}
@@ -26,11 +24,11 @@ public class Permutations {
 		}
 	}
 	
-	public static List<String> findPermutations(String toPermute){
+	public static Set<String> findPermutations(String toPermute){
 		return findPermutations(toPermute,null);
 	}
-	public static List<String> findPermutations(String toPermute, String ignorePrefix){
-		ArrayList<String> perms = new ArrayList<>();
+	public static Set<String> findPermutations(String toPermute, String ignorePrefix){
+		Set<String> perms = new TreeSet<>();
 		findPermutations("",toPermute, perms, ignorePrefix);
 		return perms;
 	}
@@ -41,13 +39,13 @@ public class Permutations {
 		char t = v[i]; v[i] = v[j]; v[j] = t;
 	}
 
-	public static List<String> bHeapPermute(String s){
-		List<String> result = new ArrayList<String>();
+	public static Set<String> bHeapPermute(String s){
+		Set<String> result = new TreeSet<>();
 		bHeapPermute(s.toCharArray(), s.length(), result);
 		return result;
 	}
 	
-	public static void bHeapPermute(char[] s, int n, List<String> perms) {
+	public static void bHeapPermute(char[] s, int n, Set<String> perms) {
 		if (n == 1) {
 			perms.add(String.valueOf(s));
 		} else {
@@ -64,8 +62,8 @@ public class Permutations {
 	//////////////////////////////////////////////////////////////////////////////
 	
 	//////////////////////////////////////////////////////////////////////////////
-	public static List<String> quickPerm(String s){
-		List<String> perms = new ArrayList<String>();
+	public static Set<String> quickPerm(String s){
+		Set<String> perms = new TreeSet<String>();
 		perms.add(s);
 		char[] chars = s.toCharArray();
 		int N = chars.length;
