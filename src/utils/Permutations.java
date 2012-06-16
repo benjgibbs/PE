@@ -1,12 +1,13 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Permutations {
 
+	//////////////////////////////////////////////////////////////////////////////
 	public static void findPermutations(
-			String prefix, String toPermute, List<String> perms, String ignorePrefix){
+			String prefix, String toPermute, Set<String> perms, String ignorePrefix){
 		if(ignorePrefix != null && prefix.startsWith(ignorePrefix)){
 			return;
 		}
@@ -22,16 +23,16 @@ public class Permutations {
 			}
 		}
 	}
-
-	public static List<String> findPermutations(String toPermute){
+	
+	public static Set<String> findPermutations(String toPermute){
 		return findPermutations(toPermute,null);
 	}
-	public static List<String> findPermutations(String toPermute, String ignorePrefix){
-		ArrayList<String> perms = new ArrayList<>();
+	public static Set<String> findPermutations(String toPermute, String ignorePrefix){
+		Set<String> perms = new TreeSet<>();
 		findPermutations("",toPermute, perms, ignorePrefix);
 		return perms;
 	}
-	
+
 	/*
 	The following algorithm generates the next permutation lexicographically after a given permutation. It changes the given permutation in-place.
 	Find the largest index k such that a[k] < a[k + 1]. If no such index exists, the permutation is the last permutation.
@@ -39,4 +40,59 @@ public class Permutations {
 	Swap a[k] with a[l].
 	Reverse the sequence from a[k + 1] up to and including the final element a[n].
 	*/
+
+	//////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////
+	private static void swap(char[] v, int i, int j) {
+		char t = v[i]; v[i] = v[j]; v[j] = t;
+	}
+
+	public static Set<String> bHeapPermute(String s){
+		Set<String> result = new TreeSet<>();
+		bHeapPermute(s.toCharArray(), s.length(), result);
+		return result;
+	}
+	
+	public static void bHeapPermute(char[] s, int n, Set<String> perms) {
+		if (n == 1) {
+			perms.add(String.valueOf(s));
+		} else {
+			for (int i = 0; i < n; i++) {
+				bHeapPermute(s, n-1, perms);
+				if (n % 2 == 1) {
+					swap(s, 0, n-1);
+				} else {
+					swap(s, i, n-1);
+				}
+			}
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////
+	public static Set<String> quickPerm(String s){
+		Set<String> perms = new TreeSet<String>();
+		perms.add(s);
+		char[] chars = s.toCharArray();
+		int N = chars.length;
+		int[] p = new int[N+1];
+		for(int i = 0; i <= N; ++i){
+			p[i] = i;
+		}
+		
+		int i = 1;
+		while(i < N){
+			p[i]--;
+			int j = i % 2 *p[i];
+			swap(chars,i,j);
+			perms.add(String.valueOf(chars));
+			i=1;
+			while(p[i] == 0){
+				p[i] = i;
+				i++;
+			}
+		}
+		return perms;
+	}
 }
