@@ -36,9 +36,11 @@ public class Problem60 {
 
 		for (int p : qs) {
 			for (int q : qs.listFrom(p)) {
-				for (int r : qs.listFrom(q)) {
-					if (check(ps, p, q) && check(ps, p, r) && check(ps, q, r)) {
-						matches.add(Sets.newHashSet(p, q, r));
+				if(check(ps,p,q)){
+					for (int r : qs.listFrom(q)) {
+						if (check(ps, p, r) && check(ps, q, r)) {
+							matches.add(Sets.newHashSet(p, q, r));
+						}
 					}
 				}
 			}
@@ -55,7 +57,8 @@ public class Problem60 {
 					int sum = sum(union);
 					if (sum < bestSum) {
 						System.out.println(String.format(
-								"Found new best sum: %d, with %s", sum, union));
+								"Found new best sum: %d, with %s. Took %dms", 
+								sum, union, (System.currentTimeMillis() - start)));
 						bestSum = sum;
 
 					}
