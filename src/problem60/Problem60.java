@@ -49,7 +49,6 @@ public class Problem60 {
 		int bestSum = Integer.MAX_VALUE;
 
 		for (int i = 0; i < matches.size(); i++) {
-			long loopStart = System.currentTimeMillis();
 			for (int j = i + 1; j < matches.size(); j++) {
 				Set<Integer> union = Sets.union(matches.get(i), matches.get(j));
 				if (union.size() == 5 && checkAll(ps, union)) {
@@ -62,8 +61,6 @@ public class Problem60 {
 					}
 				}
 			}
-			// System.out.println("Loop time: " +
-			// (System.currentTimeMillis() - loopStart) + "ms.");
 		}
 		System.out.println("Took: " + (System.currentTimeMillis() - start)
 				+ "ms.");
@@ -77,8 +74,9 @@ public class Problem60 {
 		return sum;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static boolean checkAll(PrimeSieve ps, Set<Integer> union) {
-		for (List<Integer> s : Sets.<Integer> cartesianProduct(union, union)) {
+		for (List<Integer> s : Sets.cartesianProduct(union, union)) {
 			int p1 = s.get(0);
 			int p2 = s.get(1);
 			if (p1 < p2) {
@@ -90,61 +88,10 @@ public class Problem60 {
 		return true;
 	}
 
-	// for (int max = 100; max < 1000; max += 100) {
-	// PrimeSieve qs = new PrimeSieve(max);
-	// int bestSum = Integer.MAX_VALUE;
-	// for (int p : qs.listFrom(1)) {
-	// for (int q : qs.listFrom(p)) {
-	// for (int r : qs.listFrom(q)) {
-	// for (int s : qs.listFrom(r)) {
-	// for (int t : qs.listFrom(s)) {
-	// bestSum = check(ps, bestSum, p, q, r, s, t);
-	// }
-	// }
-	// }
-	// }
-	// }
-	// System.out.println(max + " took: " + (System.currentTimeMillis() - start)
-	// + "ms.");
-	// }
-	// }
-	//
-	// private static int check(PrimeSieve ps, int bestSum, int p, int q, int r,
-	// int s, int t) {
-	// if (check(ps, p, q) && check(ps, p, r) && check(ps, p, s)
-	// && check(ps, p, t) && check(ps, q, r) && check(ps, q, s)
-	// && check(ps, q, t) && check(ps, r, s) && check(ps, r, t)
-	// && check(ps, s, t)) {
-	// int thisSum = p + q + r + s + t;
-	// if (thisSum < bestSum) {
-	// System.out
-	// .println(String
-	// .format("Found new best sum: %d, with p=%d,q=%d,r=%d,s=%d,t=%d",
-	// thisSum, p, q, r, s, t));
-	// bestSum = thisSum;
-	// }
-	// }
-	// return bestSum;
-	// }
-	//
 	private static boolean check(PrimeSieve ps, int p, int q) {
 		String pstr = String.valueOf(p);
 		String qstr = String.valueOf(q);
 		return ps.isPrime(Integer.parseInt(pstr + qstr))
 				&& ps.isPrime(Integer.parseInt(qstr + pstr));
 	}
-	//
-	// @Test
-	// public void checkGivens() {
-	// // PrimeSieve ps = new PrimeSieve(1_000_000);
-	// // int sum = check(ps,Integer.MAX_VALUE, 3,7,109,673);
-	// // assertEquals(sum, 792);
-	// }
-	//
-	// @Test
-	// public void checkListFrom() {
-	// PrimeSieve ps = new PrimeSieve(1_000_000);
-	// List<Integer> listFrom = ps.listFrom(2);
-	// assertEquals(3, listFrom.get(0).intValue());
-	// }
 }
