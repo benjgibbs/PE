@@ -32,6 +32,15 @@ public class Permutations {
 		findPermutations("",toPermute, perms, ignorePrefix);
 		return perms;
 	}
+
+	/*
+	The following algorithm generates the next permutation lexicographically after a given permutation. It changes the given permutation in-place.
+	Find the largest index k such that a[k] < a[k + 1]. If no such index exists, the permutation is the last permutation.
+	Find the largest index l such that a[k] < a[l]. Since k + 1 is such an index, l is well defined and satisfies k < l.
+	Swap a[k] with a[l].
+	Reverse the sequence from a[k + 1] up to and including the final element a[n].
+	*/
+
 	//////////////////////////////////////////////////////////////////////////////
 	
 	//////////////////////////////////////////////////////////////////////////////
