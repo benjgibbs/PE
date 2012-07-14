@@ -48,6 +48,7 @@ public class PrimeSieve implements Iterable<Integer> {
 
 			@Override public Integer next() {
 				int result = next;
+				next++;
 				while(next < primes.length && !isPrime(next)){
 					next++;
 				}
