@@ -1,9 +1,5 @@
 package problem60;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import utils.PrimeSieve;
 
 import com.google.common.collect.Sets;
@@ -32,35 +28,24 @@ public class Problem60 {
 		System.out.println("Building sieves took: "
 				+ (System.currentTimeMillis() - start) + "ms.");
 		
-		List<Set<Integer>> matches = new ArrayList<Set<Integer>>();
-
+		int bestSum = Integer.MAX_VALUE;
+		
 		for (int p : qs) {
 			for (int q : qs.listFrom(p)) {
 				if(check(ps,p,q)){
 					for (int r : qs.listFrom(q)) {
 						if (check(ps, p, r) && check(ps, q, r)) {
-							matches.add(Sets.newHashSet(p, q, r));
+							for(int s : qs.listFrom(r)){
+								if(check(ps,p,s) && check(ps, q, s) && check(ps, r, s)){
+									for(int t  : qs.listFrom(s)){
+										if(check(ps,p,t) && check(ps, q, t) && check(ps, r, t) && check(ps, s, t)){
+											bestSum = checkSum(start, bestSum, p, q, r, s, t);						
+										}
+									}
+								}
+								
+							}
 						}
-					}
-				}
-			}
-		}
-		System.out.println("Building pairs took: "
-				+ (System.currentTimeMillis() - start) + "ms.");
-
-		int bestSum = Integer.MAX_VALUE;
-
-		for (int i = 0; i < matches.size(); i++) {
-			for (int j = i + 1; j < matches.size(); j++) {
-				Set<Integer> union = Sets.union(matches.get(i), matches.get(j));
-				if (union.size() == 5 && checkAll(ps, union)) {
-					int sum = sum(union);
-					if (sum < bestSum) {
-						System.out.println(String.format(
-								"Found new best sum: %d, with %s. Took %dms", 
-								sum, union, (System.currentTimeMillis() - start)));
-						bestSum = sum;
-
 					}
 				}
 			}
@@ -68,29 +53,17 @@ public class Problem60 {
 		System.out.println("Took: " + (System.currentTimeMillis() - start)
 				+ "ms.");
 	}
+	private static int checkSum(long start, int bestSum, int p, int q, int r, int s, int t) {
+		int sum = p+q+r+s+t;
+		if (sum < bestSum) {
+			System.out.println(String.format(
+					"Found new best sum: %d, with %s. Took %dms", 
+					sum, Sets.newHashSet(p,q,r,s,t), (System.currentTimeMillis() - start)));
+			bestSum = sum;
 
-	private static int sum(Set<Integer> union) {
-		int sum = 0;
-		for (Integer i : union) {
-			sum += i.intValue();
 		}
-		return sum;
+		return bestSum;
 	}
-
-	@SuppressWarnings("unchecked")
-	private static boolean checkAll(PrimeSieve ps, Set<Integer> union) {
-		for (List<Integer> s : Sets.cartesianProduct(union, union)) {
-			int p1 = s.get(0);
-			int p2 = s.get(1);
-			if (p1 < p2) {
-				if (!check(ps, p1, p2)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
 	private static boolean check(PrimeSieve ps, int p, int q) {
 		String pstr = String.valueOf(p);
 		String qstr = String.valueOf(q);
