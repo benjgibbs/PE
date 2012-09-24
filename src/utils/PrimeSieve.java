@@ -27,7 +27,7 @@ public class PrimeSieve implements Iterable<Integer> {
 	}
 	
 	public List<Integer> listFrom(int p){
-		int q = p+2;
+		int q = p+1;
 		for(; !isPrime(p) &&  p < primes.length; p++){
 		}
 		List<Integer> result = new ArrayList<>();
@@ -48,6 +48,7 @@ public class PrimeSieve implements Iterable<Integer> {
 
 			@Override public Integer next() {
 				int result = next;
+				next++;
 				while(next < primes.length && !isPrime(next)){
 					next++;
 				}
