@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import static java.lang.System.out;
 
 public class Problem81 {
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		calculateShortestPath(getMatrix());
 	}
 	
@@ -67,11 +67,12 @@ public class Problem81 {
 	}
 	
 	
-	private static int[][] getMatrix() {
-		FileReader fr;
+	private static int[][] getMatrix() throws IOException {
+		FileReader fr = null;
+		BufferedReader br = null;
 		try {
 			fr = new FileReader("src/problem81/Matrix.txt");
-			BufferedReader br = new BufferedReader(fr);
+			br = new BufferedReader(fr);
 			String line;
 			line = br.readLine();
 			ArrayList<int[]> result = new ArrayList<int[]>();
@@ -89,6 +90,11 @@ public class Problem81 {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+		finally{
+			if(br != null){
+				br.close();
+			}
 		}
 	}
 }

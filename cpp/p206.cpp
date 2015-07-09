@@ -22,12 +22,12 @@ bool matches(long sq) {
 
 int main() {
   long x = sqrt(1020304050607080900); 
-  do {
+  for(;;) {
     long sqx = x*x;
     if(matches(sqx)) {
       cout << "x: " << x << ", square: " << sqx << ", matches: " << matches(sqx)  <<endl;
       break;
     }
-    x++;
-  } while(true);
+    x+=10;
+  }
 }
