@@ -2,6 +2,7 @@
 #include <set>
 #include <algorithm>
 #include <iterator>
+#include <iomanip>
 
 #include <boost/timer.hpp>
 
@@ -9,38 +10,24 @@
 
 using namespace std;
 
-set<long> divisors(long of) {
-  set<long> result;
-  for (long i = 1; i <= of; i++) {
-    if ( of % i == 0 ) {
-      result.insert(i);
-    }
-  }
-  return result;
-}
-
-void printDivisors(long of, set<long> divs) {
-  cout << "Divisors of " << of << ": ";
-  ostream_iterator<long> it(cout, ", ");
-  copy(divs.begin(), divs.end(), it);
-  cout << endl;
-}
-
 bool check(const Sieve& sieve, long toCheck) {
-  set<long> divs = divisors(toCheck);
-  //printDivisors(toCheck, divs);
-  for (set<long>::const_iterator d =  divs.begin(); d != divs.end(); d++) {
-    long x = *d + toCheck / *d;
-    if ( ! sieve.isPrime(x)) {
-      return false;
+  if (toCheck > 1 && toCheck % 2 == 1) return false;
+  if (!sieve.isPrime(toCheck + 1)) return false;
+
+  for (long d = 1; d <= toCheck/2; d++) {
+    if ( toCheck % d == 0 ) {
+      // is divisor
+      long x = d + toCheck / d;
+      if ( ! sieve.isPrime(x)) {
+        return false;
+      }
     }
   }
   return true;
 }
 
-int main() {
-  //long upto = 100000000;
-  long upto = 100000;
+void runSolve() {
+  long upto = 100000000;
   cout << "Building sieve..." << endl;
   Sieve sieve(upto+1);
   cout << "... done" << endl;
@@ -52,8 +39,8 @@ int main() {
       long remain = upto - i;
       double togo1 =  resetTimer.elapsed() * (remain/slice) / 60;
       double togo2 =  ((durationTimer.elapsed()/i) * remain) / 60;
-      cout << i  << "(" << resetTimer.elapsed() << "/" << togo1 
-                  << "|" <<  durationTimer.elapsed() << "/" << togo2 << "), " << endl;
+      cout << i  << ": " << setprecision(3) << resetTimer.elapsed() << "/" << togo1 
+           << "|" << setprecision(3) << durationTimer.elapsed() << "/" << togo2 << endl;
       resetTimer.restart();
     }
     if (check(sieve, i)) {
@@ -61,5 +48,17 @@ int main() {
     }
   }
   std::cout << "\nSum is: " << sum << endl;
+}
+
+
+int main() {
+  runSolve();
+/*
+  long upto = 100;
+  Sieve sieve(upto);
+  for(int i = 1; i < upto; i++) {
+    cout << i << ": " << check(sieve, i) << endl;
+  }
+  */
 }
 
