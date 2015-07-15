@@ -3,20 +3,25 @@ CC := c++
 
 LDFLAGS := -L /usr/local/lib 
 CPP_FILES := $(wildcard *.cpp)
+BINS := $(patsubst %.cpp, ./bin/%, $(CPP_FILES))
 
 CPP_FLAGS := -Wall 
 CPP_FLAGS += -std=c++11 
 #CPP_FLAGS += -stdlib=libstdc++ 
 CPP_FLAGS += -I /usr/local/include 
 CPP_FLAGS += -g 
-CPP_FLAGS += -O2
+CPP_FLAGS += -O3
 
 LIBS := sieve.cpp 
 LIBS += -l boost_unit_test_framework-mt
 
 FLAGS := $(LDFLAGS) $(CPP_FLAGS)
 
-% : %.cpp
+mkbin : ./bin
+	mkdir -p ./bin
+
+$(BINS) : ./bin/% : %.cpp
 	$(CC) $(FLAGS) $(LIBS) $< -o $@
+
 clean :
-	rm -rf $(patsubst %.cpp,%,$(CPP_FILES))
+	rm -rf $(BINS)
