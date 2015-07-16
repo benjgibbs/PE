@@ -41,7 +41,8 @@ int main(int argc, char** argv) {
   cout << "Sieve built." << endl;
   long sum = 0; 
   for(long i = 10; i < N; i++) {
-    if (s[i] == 0 && isStrongHarshad(i/10) && isTruncatable(i/10)) {
+    long truncated = i/10; 
+    if (s[i] == 0 && isStrongHarshad(truncated) && isTruncatable(truncated)) {
       cout << "Adding: " << i << endl;
       sum += i;
     }
