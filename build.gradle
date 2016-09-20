@@ -1,0 +1,13 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories{
+	mavenCentral()
+}
+
+dependencies {
+	compiile 'org.assertj:assertj-core:3.5.2'
+	compile group: 'com.google.guava', name: 'guava', version: '19.0'
+}
+
