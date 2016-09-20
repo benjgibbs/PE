@@ -2,3 +2,7 @@ bin
 obj
 *.user
 TestResults
+.gradle/**
+.settings/**
+.project
+.classpath
